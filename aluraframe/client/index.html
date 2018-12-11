@@ -58,7 +58,100 @@
         <tfoot>
         </tfoot>
     </table>
-    <script src="js/lib/index.js"></script>
-    
+    <script src="js/app/models/Negociacao.js"></script>
+    <script>
+        //Au02Ativ01
+        //É interessante separar o modelo de negócio e a visualização/apresentação, para isso podemos aplicar o MVC (Model-View-Controller). 
+        //Mas o que é um modelo? Trata-se de uma abstração do mundo real. Por exemplo, um analista de mercado que quer entender como o mercado funciona, criará um modelo em que ele possa dar entradas e executar determinado procedimentos para tentar prever como é o seu funcionamento. No nosso caso, faremos a mesma coisa.
+
+        //Au02Ativ02
+        //testando a criação da classe Negociacao 
+        // let n1 = new Negociacao();
+        // n1.quantidade = 10;
+        // console.log(n1);
+        // let n2 = new Negociacao();
+        // n1.quantidade = 20;
+        // console.log(n2);
+        
+        //Au02Ativ03
+        //(parte1)cálculo de volume de forma procedural: 
+        // let n1 = new Negociacao(new Date(), 5, 700);
+        // let volume = n1.quantidade * n1.valor;
+        // console.log(volume);
+        //(parte2)mas o que queremos é que a classe faça isso. Para isso criamos um método:
+        // let n1 = new Negociacao(new Date(), 5, 700);
+        // let volume = n1.obtemVolume();
+        // console.log(volume);
+        
+        //Au02Ativ04
+        //ainda temos um problema: as propriedades da classe ainda podem ser modificadas. Não tem como fazer isso, então criou-se a convenção de usar _ antes do nome da propriedade, indicando que a propriedade não é alterável e só pode ser acessada dentro da própria classe. Mas então como fazer pra acessar os valores fora dela? Para isso cria-se um método "getPropriedade()"
+        // let n1 = new Negociacao(new Date(), 5, 700);
+        // console.log(n1.getData());
+        // console.log(n1.getQuantidade());
+        // console.log(n1.getValor());
+        // console.log(n1.getVolume());
+        
+        //Au02Ativ05
+        //outra maneira de fazer isso é criar um método get para que seja possível acessar o método como se fosse uma propriedade, deixando o código menos verboso
+        // let n1 = new Negociacao(new Date(), 5, 700);
+        // console.log(n1.data);
+        // console.log(n1.quantidade);
+        // console.log(n1.valor);
+        // console.log(n1.volume);
+        
+        //Au02Ativ06
+        //(parte1)agora vamos ver como congelar um objeto. Lembrando que não é possível, por convenção, alterar valores de propriedades que começam com underline. Depois de congelar essa propriedade, o desenvolvedor realmente não consegue mais alterar o valor. 
+        // let n1 = new Negociacao(new Date(), 5, 700);
+        // console.log("é congelado? " + Object.isFrozen(n1));
+        // Object.freeze(n1);
+        // console.log("é congelado? " + Object.isFrozen(n1));
+        // n1._quantidade = 100000000000;
+        // console.log(n1.quantidade);
+        //(parte2)Mas isso também é feito de maneira procedural. Então podemos congelar lá na classe, adicionando o Object.freeze no construtor.
+        // let n1 = new Negociacao(new Date(), 5, 700);
+        // n1._quantidade = 100000000000;
+        // console.log(n1.quantidade);
+        
+        //Au02Ativ07
+        //(parte1)vamos fazer um teste criando um nova data e tentando atribuí-la ao n1: (não da certo, como vimos na atividade anterior, não é possível alterar propriedades congeladas)
+        // let n1 = new Negociacao(new Date(), 5, 700);
+        // let amanha = new Date();
+        // console.log(n1.data);
+        // amanha.setDate(22);
+        // n1.data = amanha;
+        // console.log(n1.data);
+        //(parte2)novo teste: vamos alterar a data usando o método setDate direto: 
+        // let n1 = new Negociacao(new Date(), 5, 700);
+        // console.log(n1.data);
+        // n1.data.setDate(22);
+        // console.log(n1.data);
+        //(parte3)isso dá certo porque o Object.freeze é razo/shallow, isso que dizer que quando congelamos as propriedades, estamos congelando apenas os seus valores diretos. Mas se essa propriedade for um objeto e ele tiver outras propriedade, elas não serão afetadas (porque ele não é profundo/deep). 
+        
+        //Au02Ativ08
+        //(parte1)colocando return new Date(this._data); no método que retorna a data, conseguimos congelar a data, pois o valor retornado não é a data original do objeto, ele vai criar um novo objeto com uma nova referência baseada naquela data. Tomar cuidado com o construtor também! Veja:
+        let hoje = new Date();
+        let n1 = new Negociacao(hoje, 5, 700);
+        console.log(n1.data);
+        hoje.setDate(22);
+        console.log(n1.data);
+        //(parte2)o n1 tá rebendo o "hoje" então quando alteramos o valor de "hoje", alteramos também o valor do objeto Negociação que recebeu ele (o n1), para se prefenir isso mudamos o "this._data" para "new Date(data.getTime());"
+
+        //Au02Ativ09
+        //troca dos "var" por "let". em outras linguagens, var possui escopo de bloco, mas em JS isso não existe. Se usamos let, a variável ganha escopo de bloco, garantindo que ela não vaze para o escopo global.
+        
+        
+        //Au02Ativ10
+        //Resumo:
+        //-criação de uma classe 
+        //-orientado a objeto
+        //-uma classe possui um constructor com os quais definimos atributos - que chamamos de propriedades - e que podemos materializar uma abstração do mundo real usando um modelo, por meio de uma classe. //-podemos passar parâmetros no construtor de uma classe e dessa forma, garantindo que no momento em que a instância de uma classe é criada, já tenha todos os dados necessários.
+        //-por convenção, adotamos que os atributos privados devem usar o prefixo _ (underline), indicando para o desenvolvedor que ele só pode acessá-lo. 
+        //-como adicionar métodos nas classes (que podem acessar os atributos privados)
+        //-criação de atributo -acessá-lo para executar o código
+            //Moral da história: temos um método que conseguimos acessar como uma propriedade, bastando ser antecedido pela palavra especial get, desta forma, estaríamos gerando um getter. Quem acessa a sua classe acredita que se trata de um propriedade, mas na verdade, trata-se por "debaixo dos panos" de um método.
+        //-Object.freeze() para congelar um objeto depois de criado. 
+            //Como Object.freeze() é shallow (raso), ele será aplicado nas propriedades do objeto, mas as propriedade que são objetos não serão todas congeladas. A ação ficará apenas na superfície. Para resolver esta questão, falamos um pouco sobre programação defensiva. Quando alguém tentar acessar a data, nós retornaremos uma nova data. Fizemos o mesmo com o construtor e com isso, evitamos que alguém consiga de fora da classe alterar algum item do estado interno.
+        //-substituir nas declarações de variáveis o uso de var por let, que permite um escopo de bloco e evita que as mesmas vazem para um escopo global. Antes do ES6, em JavaScript, era comum o uso de funções para a criação de um escopo para a variável.
+        </script>
 </body>
 </html>
