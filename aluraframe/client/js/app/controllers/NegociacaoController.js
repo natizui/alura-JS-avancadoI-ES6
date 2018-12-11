@@ -3,16 +3,25 @@ class NegociacaoController {
     constructor() {
 
         let $ = document.querySelector.bind(document); //bind é usado para que o $ mantenha a associação com o document
-        this.inputData = $("#data");
-        this.inputQuantidade = $("#quantidade");
-        this.inputValor = $("#valor");
+        this._inputData = $("#data");
+        this._inputQuantidade = $("#quantidade");
+        this._inputValor = $("#valor");
     }
 
     adiciona(event) {
         event.preventDefault();
 
-        console.log(this.inputData);
-        console.log(this.inputQuantidade);
-        console.log(this.inputValor);
+        console.log(typeof(this._inputData.value));
+        console.log(this._inputData.value);
+
+        // let negociacao = new Negociacao(
+        //     this._inputData.value,
+        //     this._inputQuantidade.value,
+        //     this._inputValor.value
+        // );
+
+        // console.log(negociacao);
     }
+
+    
 }
