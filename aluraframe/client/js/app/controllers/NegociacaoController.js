@@ -11,7 +11,16 @@ class NegociacaoController {
     adiciona(event) {
         event.preventDefault();
 
-        let data = new Date(this._inputData.value.replace(/-/g, '-'));
+        let data = new Date(...  //... é um spread operator, indica que o array será desmembrado - e o primeiro item do array, e cada parâmetro do Date será posicionado na mesma ordem no construtor.
+            this._inputData.value
+                .split('-')
+                .map((item, indice) => {
+                    // if(indice == 1) return item - 1;
+                    // return item;
+                    //pra ficar mais simples:
+                    return item - indice % 2;
+                })
+        ); 
 
         console.log(data);
 
